@@ -8,22 +8,22 @@
 
 | 頁面 | 說明 |
 |------|------|
-| ![首頁](screenshots/01_homepage.png) | **首頁** — 英雄區塊、統計數據、快速導覽 |
-| ![教練列表](screenshots/02_coaches_list.png) | **關於我們** — 4 位教練卡片總覽 |
-| ![教練個人頁](screenshots/03_coach_detail.png) | **教練個人頁** — 照片、簡介、專業領域標籤 |
-| ![課程介紹](screenshots/04_courses.png) | **課程介紹** — 5 大課程分類，可加入購物車 |
-| ![器材購買](screenshots/05_equipment.png) | **器材購買** — 分類篩選、商品卡片 |
-| ![登入](screenshots/06_login.png) | **登入頁面** — 賽博龐克風格，bcrypt 驗證 |
-| ![註冊](screenshots/07_signup.png) | **註冊頁面** — 帳號、信箱、密碼 |
-| ![儀表板](screenshots/08_dashboard.png) | **會員儀表板** — 歡迎訊息、快速功能卡片 |
-| ![購物車](screenshots/09_cart.png) | **購物車** — 商品明細、折扣碼、訂單摘要 |
-| ![結帳成功](screenshots/10_checkout_success.png) | **結帳成功** — 模擬訂單編號 |
-| ![VIP儀表板](screenshots/11_dashboard_vip.png) | **VIP 儀表板** — 累計消費、近期活動紀錄 |
-| ![問卷](screenshots/12_feedback_form.png) | **問卷回饋** — 多選題、滿意度評分 |
-| ![問卷成功](screenshots/13_feedback_success.png) | **問卷送出成功** — 資料已存入 SQLite |
-| ![DB結構](screenshots/14a_db_structure.png) | **資料庫結構** — user、feedback 資料表定義 |
-| ![DB使用者](screenshots/14b_db_user.png) | **user 資料表** — 帳號、信箱、bcrypt 加密密碼 |
-| ![DB問卷](screenshots/14c_db_feedback.png) | **feedback 資料表** — 實際問卷回饋紀錄 |
+| ![首頁](screenshots/homepage.png) | **首頁** — 英雄區塊、統計數據、快速導覽 |
+| ![教練列表](screenshots/coaches_list.png) | **關於我們** — 4 位教練卡片總覽 |
+| ![教練個人頁](screenshots/coach_detail.png) | **教練個人頁** — 照片、簡介、專業領域標籤 |
+| ![課程介紹](screenshots/courses.png) | **課程介紹** — 5 大課程分類，可加入購物車 |
+| ![器材購買](screenshots/equipment.png) | **器材購買** — 分類篩選、商品卡片 |
+| ![登入](screenshots/login.png) | **登入頁面** — 賽博龐克風格，bcrypt 驗證 |
+| ![註冊](screenshots/signup.png) | **註冊頁面** — 帳號、信箱、密碼 |
+| ![儀表板](screenshots/dashboard.png) | **會員儀表板** — 歡迎訊息、快速功能卡片 |
+| ![購物車](screenshots/cart.png) | **購物車** — 商品明細、折扣碼、訂單摘要 |
+| ![結帳成功](screenshots/checkout_success.png) | **結帳成功** — 模擬訂單編號 |
+| ![VIP儀表板](screenshots/dashboard_vip.png) | **VIP 儀表板** — 累計消費、近期活動紀錄 |
+| ![問卷](screenshots/feedback_form.png) | **問卷回饋** — 多選題、滿意度評分 |
+| ![問卷成功](screenshots/feedback_success.png) | **問卷送出成功** — 資料已存入 SQLite |
+| ![DB結構](screenshots/db_structure.png) | **資料庫結構** — user、feedback 資料表定義 |
+| ![DB使用者](screenshots/db_user.png) | **user 資料表** — 帳號、信箱、bcrypt 加密密碼 |
+| ![DB問卷](screenshots/db_feedback.png) | **feedback 資料表** — 實際問卷回饋紀錄 |
 
 ---
 
