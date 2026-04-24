@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>健身工作坊 - 首頁</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1D3124;
+      --secondary: #BACEC1;
+      --accent: #27ae60;
+      --dark: #111;
+      --light: #f8faf9;
+      --card-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans TC', sans-serif; background: var(--light); color: #333; }
+
+    /* ── NAV ── */
+    .navbar {
+      background: var(--primary);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .nav-brand {
+      color: var(--secondary);
+      font-size: 20px;
+      font-weight: 900;
+      text-decoration: none;
+      padding: 16px 0;
+      letter-spacing: 1px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 15px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .nav-links a.active { color: #fff; font-weight: 700; }
+    .cart-btn {
+      background: var(--accent) !important;
+      color: #fff !important;
+      padding: 8px 16px !important;
+      border-radius: 20px !important;
+      position: relative;
+    }
+    .cart-badge {
+      background: #e74c3c;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 11px;
+      padding: 1px 5px;
+      margin-left: 4px;
+      display: none;
+    }
+    .login-btn {
+      background: rgba(255,255,255,0.1) !important;
+      border: 1px solid rgba(255,255,255,0.3) !important;
+      color: #fff !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1D3124 0%, #2d5a3d 50%, #1a4a2e 100%);
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      padding: 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(186,206,193,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 30%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(39,174,96,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-content { max-width: 600px; z-index: 1; }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(186,206,193,0.2);
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-bottom: 24px;
+      letter-spacing: 2px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--secondary); }
+    .hero p {
+      color: rgba(255,255,255,0.8);
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #2ecc71; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(39,174,96,0.4); }
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      border: 2px solid rgba(255,255,255,0.5);
+      transition: all 0.3s;
+    }
+    .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+    .hero-visual {
+      position: absolute;
+      right: 80px;
+      display: flex;
+      gap: 16px;
+      z-index: 1;
+    }
+    .hero-stat {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      min-width: 120px;
+    }
+    .hero-stat .num { font-size: 36px; font-weight: 900; color: var(--secondary); }
+    .hero-stat .label { color: rgba(255,255,255,0.7); font-size: 13px; margin-top: 4px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 60px; }
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-title h2 {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .section-title p { color: #888; font-size: 16px; }
+    .section-title .divider {
+      width: 60px; height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 16px auto 0;
+    }
+
+    /* ── COURSES ── */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .course-card {
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+      transition: all 0.3s;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .course-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: rgba(0,0,0,0.15);
+      transition: height 0.3s;
+    }
+    .course-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.15); }
+    .course-card:hover::before { height: 6px; }
+    .course-icon { font-size: 48px; margin-bottom: 14px; }
+    .course-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .course-card p { font-size: 13px; color: #555; line-height: 1.5; }
+    .course-price {
+      display: inline-block;
+      margin-top: 12px;
+      background: rgba(0,0,0,0.1);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* ── TEAM ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .team-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s;
+    }
+    .team-card:hover { transform: translateY(-4px); }
+    .avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 16px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .team-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .team-card .role {
+      display: inline-block;
+      background: var(--secondary);
+      color: var(--primary);
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .team-card p { font-size: 13px; color: #777; line-height: 1.6; }
+
+    /* ── CTA BAND ── */
+    .cta-band {
+      background: linear-gradient(135deg, var(--primary), #2d5a3d);
+      padding: 60px;
+      text-align: center;
+      color: #fff;
+    }
+    .cta-band h2 { font-size: 32px; font-weight: 900; margin-bottom: 12px; }
+    .cta-band p { color: rgba(255,255,255,0.8); font-size: 16px; margin-bottom: 28px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #111;
+      color: #aaa;
+      text-align: center;
+      padding: 24px;
+      font-size: 14px;
+    }
+    footer a { color: var(--secondary); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <a class="nav-brand" href="/start.html">🏋️ 健身工作坊</a>
+  <div class="nav-links">
+    <a href="/start.html" class="active">首頁</a>
+    <a href="/index1.html">關於我們</a>
+    <a href="/class/course.html">課程介紹</a>
+    <a href="/equipment">器材購買</a>
+    <a href="/connection/connection1.html">聯絡我們</a>
+    <a href="/cart.html" class="cart-btn">🛒 購物車<span class="cart-badge" id="cart-badge"></span></a>
+    <a href="/loginpage" class="login-btn" id="nav-auth">登入 / 註冊</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">✦ LET'S DO EXERCISE</span>
+    <h1>打造你的<span>理想體態</span><br>從這裡開始</h1>
+    <p>專業教練團隊、多元化課程、頂級器材設備，<br>陪你突破每一個健身瓶頸。</p>
+    <div class="hero-btns">
+      <a href="/class/course.html" class="btn-primary">瀏覽課程</a>
+      <a href="/loginpage" class="btn-outline">立即加入</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-stat">
+      <div class="num">500+</div>
+      <div class="label">活躍會員</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">12</div>
+      <div class="label">精選課程</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">4</div>
+      <div class="label">專業教練</div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section style="background:#fff;">
+  <div class="section-title">
+    <h2>熱門課程</h2>
+    <p>涵蓋各種健身需求，找到最適合你的訓練方式</p>
+    <div class="divider"></div>
+  </div>
+  <div class="courses-grid">
+    <a class="course-card" href="/class/course.html" style="background:#fff8e1;">
+      <div class="course-icon">💪</div>
+      <h3>上肢課程</h3>
+      <p>肩膀、手臂、背部全方位訓練</p>
+      <span class="course-price">$500 / 小時</span>
+    </a>
+    <a class="course-card" href="/class/course.html" style="background:#e3f2fd;">
+      <div class="course-icon">🦵</div>
+      <h3>下肢課程</h3>
+      <p>深蹲、硬舉、腿部全面強化</p>
+      <span class="course-price">$500 / 小時</span>
+    </a>
+    <a class="course-card" href="/class/course.html" style="background:#fff3e0;">
+      <div class="course-icon">🎯</div>
+      <h3>核心課程</h3>
+      <p>腹肌、核心穩定性、體態調整</p>
+      <span class="course-price">$800 / 小時</span>
+    </a>
+    <a class="course-card" href="/class/course.html" style="background:#f3e5f5;">
+      <div class="course-icon">🏃</div>
+      <h3>有氧課程</h3>
+      <p>慢跑訓練、心肺提升、燃脂</p>
+      <span class="course-price">$600 / 小時</span>
+    </a>
+    <a class="course-card" href="/class/course.html" style="background:#e8f5e9;">
+      <div class="course-icon">🧘</div>
+      <h3>其他課程</h3>
+      <p>瑜珈、普拉提、伸展放鬆</p>
+      <span class="course-price">$600 / 小時</span>
+    </a>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section style="background:var(--light);">
+  <div class="section-title">
+    <h2>專業教練團隊</h2>
+    <p>每位教練都擁有豐富的專業資歷與熱情</p>
+    <div class="divider"></div>
+  </div>
+  <div class="team-grid">
+    <a href="/coach/Johnny.html" class="team-card" style="text-decoration:none;color:inherit;">
+      <div class="avatar" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">J</div>
+      <h3>Johnny 醫師</h3>
+      <span class="role">營養師</span>
+      <p>專精運動營養規劃，協助學員制定科學化飲食計畫，打造最佳訓練成效。</p>
+    </a>
+    <a href="/coach/Yuchen.html" class="team-card" style="text-decoration:none;color:inherit;">
+      <div class="avatar" style="background:linear-gradient(135deg,#3498db,#2980b9);">Y</div>
+      <h3>Yuchen 教練</h3>
+      <span class="role">有氧運動專家</span>
+      <p>擁有10年有氧訓練經驗，課程生動活潑，帶你突破心肺極限。</p>
+    </a>
+    <a href="/coach/Ethan.html" class="team-card" style="text-decoration:none;color:inherit;">
+      <div class="avatar" style="background:linear-gradient(135deg,#27ae60,#1e8449);">E</div>
+      <h3>Ethan 教練</h3>
+      <span class="role">重量訓練專家</span>
+      <p>國家級健力選手出身，專業指導自由重量與機器訓練，安全有效增肌。</p>
+    </a>
+    <a href="/coach/Henry.html" class="team-card" style="text-decoration:none;color:inherit;">
+      <div class="avatar" style="background:linear-gradient(135deg,#9b59b6,#7d3c98);">H</div>
+      <h3>Henry 教練</h3>
+      <span class="role">健身教練</span>
+      <p>擅長體態雕塑與減重訓練，個人化課程設計，幫助每位學員達成目標。</p>
+    </a>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <h2>準備好開始了嗎？</h2>
+  <p>立即加入健身工作坊，讓專業教練陪你打造理想體態</p>
+  <a href="/loginpage" class="btn-primary" style="font-size:18px;padding:16px 40px;">免費註冊帳號</a>
+</div>
+
+<footer>
+  <p>&copy; 2024 健身工作坊 &nbsp;|&nbsp; <a href="/connection/connection1.html">聯絡我們</a> &nbsp;|&nbsp; <a href="/connection/comment.html">意見回饋</a></p>
+</footer>
+
+<script>
+  // Cart badge
+  const cart = JSON.parse(localStorage.getItem('fw_cart') || '[]');
+  const count = cart.reduce((s,i) => s + i.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (count > 0) { badge.textContent = count; badge.style.display = 'inline'; }
+
+  // Auth state
+  fetch('/session-user').then(r => r.json()).then(d => {
+    const a = document.getElementById('nav-auth');
+    if (d.loggedIn) {
+      a.href = '/start1.html';
+      a.textContent = '👤 ' + d.user.帳號;
+    }
+  }).catch(() => {});
+</script>
+</body>
+</html>

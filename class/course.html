@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>課程介紹 - 健身工作坊</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary:#1D3124; --secondary:#BACEC1; --accent:#27ae60; --light:#f8faf9; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Sans TC',sans-serif; background:var(--light); color:#333; }
+
+    .navbar {
+      background:var(--primary); padding:0 40px;
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.3);
+    }
+    .nav-brand { color:var(--secondary); font-size:20px; font-weight:900; text-decoration:none; padding:16px 0; }
+    .nav-links { display:flex; align-items:center; gap:4px; }
+    .nav-links a { color:#ccc; text-decoration:none; padding:8px 14px; border-radius:6px; font-size:15px; transition:all 0.2s; }
+    .nav-links a:hover { background:rgba(255,255,255,0.15); color:#fff; }
+    .nav-links a.active { color:#fff; font-weight:700; }
+    .cart-btn { background:var(--accent)!important; color:#fff!important; padding:8px 16px!important; border-radius:20px!important; }
+    .cart-badge { background:#e74c3c; color:#fff; border-radius:50%; font-size:11px; padding:1px 5px; margin-left:4px; display:none; }
+    .login-btn { background:rgba(255,255,255,0.1)!important; border:1px solid rgba(255,255,255,0.3)!important; color:#fff!important; }
+
+    .page-hero {
+      background:linear-gradient(135deg,var(--primary),#2d5a3d);
+      padding:70px 60px; text-align:center; color:#fff;
+    }
+    .page-hero h1 { font-size:42px; font-weight:900; margin-bottom:14px; }
+    .page-hero h1 span { color:var(--secondary); }
+    .page-hero p { color:rgba(255,255,255,0.8); font-size:16px; max-width:600px; margin:0 auto; line-height:1.8; }
+
+    .courses-wrap { max-width:900px; margin:0 auto; padding:60px 40px 80px; display:flex; flex-direction:column; gap:28px; }
+
+    .course-block {
+      background:#fff; border-radius:20px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.08);
+      overflow:hidden; transition:box-shadow 0.3s;
+    }
+    .course-block:hover { box-shadow:0 8px 30px rgba(0,0,0,0.14); }
+    .course-header {
+      padding:28px 32px 0;
+      display:flex; align-items:center; gap:20px;
+    }
+    .course-emoji { font-size:52px; }
+    .course-meta h2 { font-size:24px; font-weight:900; color:var(--primary); margin-bottom:4px; }
+    .course-meta .price-tag {
+      display:inline-block; background:var(--secondary);
+      color:var(--primary); padding:4px 14px; border-radius:12px;
+      font-size:13px; font-weight:700;
+    }
+    .course-desc { padding:16px 32px; color:#555; font-size:15px; line-height:1.8; }
+    .course-links {
+      padding:16px 32px 24px;
+      display:flex; flex-wrap:wrap; gap:12px; align-items:center;
+      border-top:1px solid #f0f0f0;
+    }
+    .course-link {
+      display:flex; align-items:center; gap:8px;
+      text-decoration:none; color:var(--primary);
+      background:var(--light); border:1px solid var(--secondary);
+      padding:8px 18px; border-radius:20px; font-size:14px; font-weight:500;
+      transition:all 0.2s;
+    }
+    .course-link:hover { background:var(--primary); color:#fff; border-color:var(--primary); }
+    .enroll-btn {
+      margin-left:auto;
+      background:var(--accent); color:#fff;
+      border:none; padding:10px 24px; border-radius:20px;
+      font-size:14px; font-weight:700; cursor:pointer;
+      font-family:inherit; transition:all 0.2s;
+    }
+    .enroll-btn:hover { background:#2ecc71; transform:translateY(-1px); }
+    .enroll-btn.added { background:#95a5a6; }
+
+    /* Modal */
+    .modal-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,0.5); z-index:200;
+      justify-content:center; align-items:center;
+    }
+    .modal-overlay.active { display:flex; }
+    .modal {
+      background:#fff; border-radius:16px; padding:36px;
+      max-width:420px; width:90%; text-align:center;
+    }
+    .modal h3 { color:var(--primary); font-size:22px; margin-bottom:10px; }
+    .modal p { color:#666; margin-bottom:20px; }
+    .modal-btn {
+      background:var(--accent); color:#fff; border:none;
+      border-radius:20px; padding:12px 28px; font-size:15px;
+      cursor:pointer; font-family:inherit; margin:4px;
+    }
+    .modal-btn.secondary { background:#95a5a6; }
+
+    footer { background:#111; color:#aaa; text-align:center; padding:24px; font-size:14px; }
+    footer a { color:var(--secondary); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="/start.html">🏋️ 健身工作坊</a>
+  <div class="nav-links">
+    <a href="/start.html">首頁</a>
+    <a href="/index1.html">關於我們</a>
+    <a href="/class/course.html" class="active">課程介紹</a>
+    <a href="/equipment">器材購買</a>
+    <a href="/connection/connection1.html">聯絡我們</a>
+    <a href="/cart.html" class="cart-btn">🛒 購物車<span class="cart-badge" id="cart-badge"></span></a>
+    <a href="/loginpage" class="login-btn" id="nav-auth">登入 / 註冊</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <h1>精選<span>課程介紹</span></h1>
+  <p>從入門到進階，涵蓋各種健身需求。點擊「立即報名」將課程加入購物車。</p>
+</div>
+
+<div class="courses-wrap">
+
+  <div class="course-block">
+    <div class="course-header">
+      <div class="course-emoji">💪</div>
+      <div class="course-meta">
+        <h2>上肢課程</h2>
+        <span class="price-tag">$500 / 小時</span>
+      </div>
+    </div>
+    <div class="course-desc">
+      全面訓練上肢各個部位，包含肩膀、手臂、背部和核心肌群。結合重量訓練、核心穩定性練習、柔軟度和伸展運動，建立健康的肌肉結構。
+    </div>
+    <div class="course-links">
+      <a href="/class/upper1.html" class="course-link">💪 肩膀訓練</a>
+      <a href="/class/upper2.html" class="course-link">🦾 手臂訓練</a>
+      <a href="/class/upper3.html" class="course-link">🔙 背部訓練</a>
+      <button class="enroll-btn" onclick="addCourse('上肢課程', 500, this)">立即報名 +</button>
+    </div>
+  </div>
+
+  <div class="course-block">
+    <div class="course-header">
+      <div class="course-emoji">🦵</div>
+      <div class="course-meta">
+        <h2>下肢課程</h2>
+        <span class="price-tag">$500 / 小時</span>
+      </div>
+    </div>
+    <div class="course-desc">
+      深度鍛練下肢力量與爆發力，涵蓋大腿四頭肌、後腿肌、臀部等主要肌群。透過深蹲、硬舉、腿推等動作，全面提升下肢力量與運動表現。
+    </div>
+    <div class="course-links">
+      <a href="/class/lower1.html" class="course-link">🦵 大腿四頭肌</a>
+      <a href="/class/lower2.html" class="course-link">🏋️ 大腿後肌</a>
+      <a href="/class/lower3.html" class="course-link">🍑 臀部訓練</a>
+      <button class="enroll-btn" onclick="addCourse('下肢課程', 500, this)">立即報名 +</button>
+    </div>
+  </div>
+
+  <div class="course-block">
+    <div class="course-header">
+      <div class="course-emoji">🎯</div>
+      <div class="course-meta">
+        <h2>核心課程</h2>
+        <span class="price-tag">$800 / 小時</span>
+      </div>
+    </div>
+    <div class="course-desc">
+      針對腹部深層肌群設計，強化核心穩定性與體態。透過棒式、捲腹、轉體等訓練動作，幫助你打造明顯的腹肌線條並改善姿勢問題。
+    </div>
+    <div class="course-links">
+      <a href="/class/main1.html" class="course-link">🎯 腹部訓練</a>
+      <a href="/class/main2.html" class="course-link">⚡ 核心穩定</a>
+      <button class="enroll-btn" onclick="addCourse('核心課程', 800, this)">立即報名 +</button>
+    </div>
+  </div>
+
+  <div class="course-block">
+    <div class="course-header">
+      <div class="course-emoji">🏃</div>
+      <div class="course-meta">
+        <h2>有氧課程</h2>
+        <span class="price-tag">$600 / 小時</span>
+      </div>
+    </div>
+    <div class="course-desc">
+      提升心肺耐力、加速脂肪燃燒。以科學化的跑步訓練方法，從慢跑技巧到間歇訓練，幫助你有效提升有氧能力和身體組成。
+    </div>
+    <div class="course-links">
+      <a href="/class/air1.html" class="course-link">🏃 慢跑技巧</a>
+      <a href="/class/air2.html" class="course-link">⚡ 間歇訓練</a>
+      <button class="enroll-btn" onclick="addCourse('有氧課程', 600, this)">立即報名 +</button>
+    </div>
+  </div>
+
+  <div class="course-block">
+    <div class="course-header">
+      <div class="course-emoji">🧘</div>
+      <div class="course-meta">
+        <h2>其他課程</h2>
+        <span class="price-tag">$600 / 小時</span>
+      </div>
+    </div>
+    <div class="course-desc">
+      多元化的輕鬆運動選項，包括瑜珈、普拉提、徒步健行等。適合作為主訓練之外的輔助運動，幫助身體恢復、改善柔軟度與心理放鬆。
+    </div>
+    <div class="course-links">
+      <a href="/class/other1.html" class="course-link">🧘 瑜珈</a>
+      <a href="/class/other2.html" class="course-link">🤸 普拉提</a>
+      <a href="/class/other3.html" class="course-link">🥾 徒步健行</a>
+      <button class="enroll-btn" onclick="addCourse('其他課程', 600, this)">立即報名 +</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3>✅ 已加入購物車！</h3>
+    <p id="modal-msg"></p>
+    <button class="modal-btn" onclick="window.location.href='/cart.html'">前往結帳</button>
+    <button class="modal-btn secondary" onclick="closeModal()">繼續選課</button>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 健身工作坊 &nbsp;|&nbsp; <a href="/connection/connection1.html">聯絡我們</a></p>
+</footer>
+
+<script>
+  // Nav init
+  const cart0 = JSON.parse(localStorage.getItem('fw_cart') || '[]');
+  const cnt0 = cart0.reduce((s,i) => s + i.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (cnt0 > 0) { badge.textContent = cnt0; badge.style.display = 'inline'; }
+  fetch('/session-user').then(r => r.json()).then(d => {
+    const a = document.getElementById('nav-auth');
+    if (d.loggedIn) { a.href = '/start1.html'; a.textContent = '👤 ' + d.user.帳號; }
+  }).catch(() => {});
+
+  function addCourse(name, price, btn) {
+    let cart = JSON.parse(localStorage.getItem('fw_cart') || '[]');
+    const idx = cart.findIndex(i => i.name === name && i.type === 'course');
+    if (idx >= 0) { cart[idx].qty += 1; }
+    else { cart.push({ name, price, qty: 1, type: 'course' }); }
+    localStorage.setItem('fw_cart', JSON.stringify(cart));
+
+    const total = cart.reduce((s,i) => s + i.qty, 0);
+    badge.textContent = total;
+    badge.style.display = 'inline';
+
+    btn.textContent = '✓ 已加入';
+    btn.classList.add('added');
+    setTimeout(() => { btn.textContent = '立即報名 +'; btn.classList.remove('added'); }, 2000);
+
+    document.getElementById('modal-msg').textContent = '「' + name + '」（$' + price + '/小時）已加入購物車！';
+    document.getElementById('modal').classList.add('active');
+  }
+  function closeModal() { document.getElementById('modal').classList.remove('active'); }
+  document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+</script>
+</body>
+</html>

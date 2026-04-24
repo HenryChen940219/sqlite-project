@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>關於我們 - 健身工作坊</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary:#1D3124; --secondary:#BACEC1; --accent:#27ae60; --light:#f8faf9; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Sans TC',sans-serif; background:var(--light); color:#333; }
+
+    .navbar {
+      background:var(--primary); padding:0 40px;
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:100;
+      box-shadow:0 2px 10px rgba(0,0,0,0.3);
+    }
+    .nav-brand { color:var(--secondary); font-size:20px; font-weight:900; text-decoration:none; padding:16px 0; }
+    .nav-links { display:flex; align-items:center; gap:4px; }
+    .nav-links a { color:#ccc; text-decoration:none; padding:8px 14px; border-radius:6px; font-size:15px; transition:all 0.2s; }
+    .nav-links a:hover { background:rgba(255,255,255,0.15); color:#fff; }
+    .nav-links a.active { color:#fff; font-weight:700; }
+    .cart-btn { background:var(--accent)!important; color:#fff!important; padding:8px 16px!important; border-radius:20px!important; }
+    .cart-badge { background:#e74c3c; color:#fff; border-radius:50%; font-size:11px; padding:1px 5px; margin-left:4px; display:none; }
+    .login-btn { background:rgba(255,255,255,0.1)!important; border:1px solid rgba(255,255,255,0.3)!important; color:#fff!important; }
+
+    /* PAGE HERO */
+    .page-hero {
+      background:linear-gradient(135deg, var(--primary) 0%, #2d5a3d 100%);
+      padding:80px 60px;
+      text-align:center;
+      color:#fff;
+    }
+    .page-hero h1 { font-size:48px; font-weight:900; margin-bottom:16px; }
+    .page-hero h1 span { color:var(--secondary); }
+    .page-hero p { font-size:18px; color:rgba(255,255,255,0.8); max-width:600px; margin:0 auto; line-height:1.8; }
+
+    section { padding:70px 60px; }
+    .section-title { text-align:center; margin-bottom:50px; }
+    .section-title h2 { font-size:32px; font-weight:900; color:var(--primary); margin-bottom:10px; }
+    .section-title p { color:#888; }
+    .divider { width:60px; height:4px; background:var(--accent); border-radius:2px; margin:14px auto 0; }
+
+    /* MISSION */
+    .mission-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:24px; max-width:1000px; margin:0 auto;
+    }
+    .mission-card {
+      background:#fff; border-radius:16px; padding:32px 24px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.08);
+      border-top:4px solid var(--accent);
+      transition:transform 0.3s;
+    }
+    .mission-card:hover { transform:translateY(-4px); }
+    .mission-icon { font-size:40px; margin-bottom:16px; }
+    .mission-card h3 { font-size:18px; font-weight:700; color:var(--primary); margin-bottom:10px; }
+    .mission-card p { color:#666; line-height:1.7; font-size:15px; }
+
+    /* COACHES */
+    .coaches-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:28px; max-width:1100px; margin:0 auto;
+    }
+    .coach-card {
+      background:#fff; border-radius:20px;
+      overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1);
+      transition:transform 0.3s, box-shadow 0.3s;
+      text-decoration:none; color:inherit;
+    }
+    .coach-card:hover { transform:translateY(-6px); box-shadow:0 12px 30px rgba(0,0,0,0.15); }
+    .coach-banner {
+      height:140px; display:flex;
+      align-items:center; justify-content:center;
+      font-size:64px;
+    }
+    .coach-body { padding:24px; }
+    .coach-body h3 { font-size:20px; font-weight:700; margin-bottom:6px; }
+    .coach-tag {
+      display:inline-block; background:var(--secondary); color:var(--primary);
+      padding:4px 14px; border-radius:12px; font-size:12px; font-weight:700; margin-bottom:12px;
+    }
+    .coach-body p { color:#666; font-size:14px; line-height:1.7; margin-bottom:16px; }
+    .coach-link {
+      display:inline-block; color:var(--accent); font-size:14px;
+      font-weight:700; text-decoration:none;
+    }
+    .coach-link:hover { text-decoration:underline; }
+
+    /* STORY */
+    .story-wrap {
+      max-width:800px; margin:0 auto;
+      background:#fff; border-radius:20px;
+      padding:50px; box-shadow:0 4px 20px rgba(0,0,0,0.08);
+    }
+    .story-wrap p { color:#555; font-size:16px; line-height:2; margin-bottom:20px; }
+    .story-wrap p:last-child { margin-bottom:0; }
+
+    /* CTA */
+    .cta-band {
+      background:linear-gradient(135deg,var(--primary),#2d5a3d);
+      padding:60px; text-align:center; color:#fff;
+    }
+    .cta-band h2 { font-size:30px; font-weight:900; margin-bottom:12px; }
+    .cta-band p { color:rgba(255,255,255,0.8); margin-bottom:28px; }
+    .btn-primary {
+      background:var(--accent); color:#fff;
+      padding:14px 32px; border-radius:30px;
+      text-decoration:none; font-size:16px; font-weight:700;
+      transition:all 0.3s; display:inline-block;
+    }
+    .btn-primary:hover { background:#2ecc71; transform:translateY(-2px); }
+
+    footer { background:#111; color:#aaa; text-align:center; padding:24px; font-size:14px; }
+    footer a { color:var(--secondary); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="/start.html">🏋️ 健身工作坊</a>
+  <div class="nav-links">
+    <a href="/start.html">首頁</a>
+    <a href="/index1.html" class="active">關於我們</a>
+    <a href="/class/course.html">課程介紹</a>
+    <a href="/equipment">器材購買</a>
+    <a href="/connection/connection1.html">聯絡我們</a>
+    <a href="/cart.html" class="cart-btn">🛒 購物車<span class="cart-badge" id="cart-badge"></span></a>
+    <a href="/loginpage" class="login-btn" id="nav-auth">登入 / 註冊</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <h1>關於<span>健身工作坊</span></h1>
+  <p>我們相信每個人都值得擁有健康活力的生活，致力於提供最專業的健身環境與服務。</p>
+</div>
+
+<!-- MISSION -->
+<section style="background:#fff;">
+  <div class="section-title">
+    <h2>我們的理念</h2>
+    <p>三大核心價值，驅動我們持續進步</p>
+    <div class="divider"></div>
+  </div>
+  <div class="mission-grid">
+    <div class="mission-card">
+      <div class="mission-icon">🎯</div>
+      <h3>專業精準</h3>
+      <p>每位教練皆具備專業資格認證，以科學化訓練方法協助學員安全有效地達成目標。</p>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">❤️</div>
+      <h3>以人為本</h3>
+      <p>我們了解每個人的身體狀況不同，提供客製化課程設計，讓訓練真正符合你的需求。</p>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">🌱</div>
+      <h3>持續成長</h3>
+      <p>不斷引進最新健身知識與設備，打造讓學員持續進步、享受健身過程的最佳環境。</p>
+    </div>
+  </div>
+</section>
+
+<!-- COACHES -->
+<section style="background:var(--light);">
+  <div class="section-title">
+    <h2>認識我們的教練</h2>
+    <p>每位教練都有獨特的專業背景，點擊查看詳細介紹</p>
+    <div class="divider"></div>
+  </div>
+  <div class="coaches-grid">
+    <a href="/coach/Johnny.html" class="coach-card">
+      <div class="coach-banner" style="background:linear-gradient(135deg,#ffecd2,#fcb69f);">🩺</div>
+      <div class="coach-body">
+        <h3>Johnny 醫師</h3>
+        <span class="coach-tag">運動營養師</span>
+        <p>擁有醫學背景的運動營養師，專精運動前中後的營養補給策略，以及體重管理計畫的制定。</p>
+        <span class="coach-link">查看詳細介紹 →</span>
+      </div>
+    </a>
+    <a href="/coach/Yuchen.html" class="coach-card">
+      <div class="coach-banner" style="background:linear-gradient(135deg,#a1c4fd,#c2e9fb);">🏃</div>
+      <div class="coach-body">
+        <h3>Yuchen 教練</h3>
+        <span class="coach-tag">有氧運動專家</span>
+        <p>有氧訓練指導超過 10 年，熟悉各種心肺訓練方式，課程充滿活力，深受學員喜愛。</p>
+        <span class="coach-link">查看詳細介紹 →</span>
+      </div>
+    </a>
+    <a href="/coach/Ethan.html" class="coach-card">
+      <div class="coach-banner" style="background:linear-gradient(135deg,#d4fc79,#96e6a1);">🏋️</div>
+      <div class="coach-body">
+        <h3>Ethan 教練</h3>
+        <span class="coach-tag">重量訓練專家</span>
+        <p>前國家級健力選手，精通自由重量動作力學，致力於讓學員用正確動作安全增肌。</p>
+        <span class="coach-link">查看詳細介紹 →</span>
+      </div>
+    </a>
+    <a href="/coach/Henry.html" class="coach-card">
+      <div class="coach-banner" style="background:linear-gradient(135deg,#e0c3fc,#8ec5fc);">🧘</div>
+      <div class="coach-body">
+        <h3>Henry 教練</h3>
+        <span class="coach-tag">體態雕塑教練</span>
+        <p>擅長減重與體態雕塑，結合有氧與重訓的複合式訓練，幫助學員打造理想線條。</p>
+        <span class="coach-link">查看詳細介紹 →</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- STORY -->
+<section style="background:#fff;">
+  <div class="section-title">
+    <h2>我們的故事</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="story-wrap">
+    <p>健身工作坊創立於 2020 年，起源於幾位熱愛健身的夥伴，希望打造一個不只是「健身房」的場所——一個讓人願意每天走進來、感受活力與成長的社群空間。</p>
+    <p>我們從最初的小型工作室起步，歷經四年發展，如今已擁有超過 500 位活躍會員、5 大課程體系與 4 位專業教練，持續為更多人帶來健康生活的改變。</p>
+    <p>我們相信：每個人都有能力打造屬於自己的理想體態。無論你是剛踏入健身世界的新手，還是追求突破的進階訓練者，健身工作坊都有適合你的課程與教練。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <h2>加入我們的健身大家庭</h2>
+  <p>立即報名，開啟你的健康新生活</p>
+  <a href="/loginpage" class="btn-primary">免費註冊帳號</a>
+</div>
+
+<footer>
+  <p>&copy; 2024 健身工作坊 &nbsp;|&nbsp; <a href="/connection/connection1.html">聯絡我們</a></p>
+</footer>
+
+<script>
+  const cart = JSON.parse(localStorage.getItem('fw_cart') || '[]');
+  const count = cart.reduce((s,i) => s + i.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (count > 0) { badge.textContent = count; badge.style.display = 'inline'; }
+  fetch('/session-user').then(r => r.json()).then(d => {
+    const a = document.getElementById('nav-auth');
+    if (d.loggedIn) { a.href = '/start1.html'; a.textContent = '👤 ' + d.user.帳號; }
+  }).catch(() => {});
+</script>
+</body>
+</html>

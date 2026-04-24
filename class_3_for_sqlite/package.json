@@ -1,0 +1,23 @@
+{
+  "name": "fitness-workshop",
+  "version": "1.0.0",
+  "description": "健身工作坊 - 健身房課程與器材電商網站",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "fitness",
+    "gym",
+    "sqlite",
+    "express"
+  ],
+  "author": "CHI-YU, CHEN (HenryChen940219)",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "sqlite3": "^5.1.6"
+  }
+}

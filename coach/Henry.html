@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Henry 教練 - 健身工作坊</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary:#1D3124; --secondary:#BACEC1; --accent:#27ae60; --light:#f8faf9; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Sans TC',sans-serif; background:var(--light); color:#333; min-height:100vh; }
+    .navbar { background:var(--primary); padding:0 40px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.3); }
+    .nav-brand { color:var(--secondary); font-size:20px; font-weight:900; text-decoration:none; padding:16px 0; }
+    .nav-links { display:flex; align-items:center; gap:4px; }
+    .nav-links a { color:#ccc; text-decoration:none; padding:8px 14px; border-radius:6px; font-size:15px; transition:all 0.2s; }
+    .nav-links a:hover { background:rgba(255,255,255,0.15); color:#fff; }
+    .cart-btn { background:var(--accent)!important; color:#fff!important; padding:8px 16px!important; border-radius:20px!important; }
+    .cart-badge { background:#e74c3c; color:#fff; border-radius:50%; font-size:11px; padding:1px 5px; margin-left:4px; display:none; }
+    .login-btn { background:rgba(255,255,255,0.1)!important; border:1px solid rgba(255,255,255,0.3)!important; color:#fff!important; }
+    .back-bar { padding:16px 40px; background:#fff; border-bottom:1px solid #eee; }
+    .back-btn { display:inline-flex; align-items:center; gap:6px; color:var(--primary); text-decoration:none; font-size:15px; font-weight:700; border:1px solid var(--secondary); padding:8px 18px; border-radius:8px; transition:all 0.2s; }
+    .back-btn:hover { background:var(--primary); color:#fff; border-color:var(--primary); }
+    .coach-wrap { max-width:900px; margin:50px auto 80px; background:#fff; border-radius:20px; box-shadow:0 4px 24px rgba(0,0,0,0.1); overflow:hidden; display:flex; align-items:stretch; }
+    .coach-photo-side { width:320px; flex-shrink:0; background:linear-gradient(135deg,#e0c3fc,#8ec5fc); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 30px; }
+    .coach-photo-side img { width:220px; height:220px; object-fit:cover; border-radius:50%; border:5px solid #fff; box-shadow:0 4px 20px rgba(0,0,0,0.2); }
+    .coach-name-label { margin-top:20px; text-align:center; font-size:20px; font-weight:900; color:var(--primary); }
+    .coach-role-label { background:var(--primary); color:#fff; padding:4px 16px; border-radius:12px; font-size:13px; font-weight:700; margin-top:8px; }
+    .coach-info-side { flex:1; padding:48px 44px; display:flex; flex-direction:column; justify-content:center; }
+    .coach-info-side h2 { font-size:14px; font-weight:700; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+    .coach-info-side h1 { font-size:32px; font-weight:900; color:var(--primary); margin-bottom:24px; border-bottom:3px solid var(--secondary); padding-bottom:16px; }
+    .coach-info-side p { color:#555; font-size:16px; line-height:1.9; margin-bottom:16px; }
+    .spec-list { margin-top:20px; }
+    .spec-list h3 { font-size:15px; font-weight:700; color:var(--primary); margin-bottom:10px; }
+    .spec-tags { display:flex; flex-wrap:wrap; gap:8px; }
+    .spec-tag { background:var(--light); border:1px solid var(--secondary); color:var(--primary); padding:5px 14px; border-radius:16px; font-size:13px; font-weight:700; }
+    footer { background:#111; color:#aaa; text-align:center; padding:24px; font-size:14px; }
+    footer a { color:var(--secondary); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="/start.html">🏋️ 健身工作坊</a>
+  <div class="nav-links">
+    <a href="/start.html">首頁</a>
+    <a href="/index1.html" class="active">關於我們</a>
+    <a href="/class/course.html">課程介紹</a>
+    <a href="/equipment">器材購買</a>
+    <a href="/connection/connection1.html">聯絡我們</a>
+    <a href="/cart.html" class="cart-btn">🛒 購物車<span class="cart-badge" id="cart-badge"></span></a>
+    <a href="/loginpage" class="login-btn" id="nav-auth">登入 / 註冊</a>
+  </div>
+</nav>
+
+<div class="back-bar">
+  <a href="javascript:history.back()" class="back-btn">← 返回</a>
+</div>
+
+<div class="coach-wrap">
+  <div class="coach-photo-side">
+    <img src="henry.jpg" alt="Henry 教練">
+    <div class="coach-name-label">Henry 教練</div>
+    <span class="coach-role-label">體態雕塑教練</span>
+  </div>
+  <div class="coach-info-side">
+    <h2>COACH INTRODUCTION</h2>
+    <h1>健身教練介紹</h1>
+    <p>Henry 教練是我們的健身教練，擁有豐富的健身知識和教學經驗。他致力於幫助客戶達到健康目標，提高生活品質。無論您是初學者還是健身達人，Henry 教練都能根據您的需求制定個性化的健身計劃。</p>
+    <p>Henry 教練熟悉各種訓練方法，包括有氧運動、重量訓練、伸展運動等，並能根據客戶的身體狀況和目標設定適合的計劃。他熱愛健身事業，竭盡所能幫助每一位學員養成健康的生活方式。</p>
+    <div class="spec-list">
+      <h3>專業領域</h3>
+      <div class="spec-tags">
+        <span class="spec-tag">體態雕塑</span>
+        <span class="spec-tag">全身功能性訓練</span>
+        <span class="spec-tag">伸展與柔韌性</span>
+        <span class="spec-tag">個人化健身規劃</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 健身工作坊 &nbsp;|&nbsp; <a href="/index1.html">認識更多教練</a></p>
+</footer>
+
+<script>
+  const cart = JSON.parse(localStorage.getItem('fw_cart') || '[]');
+  const count = cart.reduce((s,i) => s + i.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (count > 0) { badge.textContent = count; badge.style.display = 'inline'; }
+  fetch('/session-user').then(r=>r.json()).then(d=>{
+    const a = document.getElementById('nav-auth');
+    if(d.loggedIn){ a.href='/start1.html'; a.textContent='👤 '+d.user.帳號; }
+  }).catch(()=>{});
+</script>
+</body>
+</html>

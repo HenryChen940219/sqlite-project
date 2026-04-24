@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>反饋問卷 - 健身工作坊</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #574e4e;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+        nav {
+            background-color: #BACEC1;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav a {
+            color: #1D3124;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 16px;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        nav a:hover {
+            background-color: #1D3124;
+            color: #fff;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto 80px;
+            padding: 30px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1D3124;
+            margin-bottom: 30px;
+        }
+        h3 {
+            color: #1D3124;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #BACEC1;
+            padding-bottom: 5px;
+        }
+        label {
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+        input[type="date"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #f0f0f0;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .checkbox-group label:hover {
+            background: #BACEC1;
+        }
+        .radio-group label {
+            margin-right: 20px;
+            font-size: 15px;
+        }
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        input[type="submit"] {
+            background-color: #1D3124;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 30px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #BACEC1;
+            color: #1D3124;
+        }
+        .back-btn {
+            background-color: gray;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            background-color: #555;
+        }
+        footer {
+            background-color: #1D3124;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="color:#fff;margin:0;">健身工作坊</h1>
+    </header>
+    <nav>
+        <a href="/start.html">首頁</a>
+        <a href="/index1.html">關於我們</a>
+        <a href="/class/course.html">課程介紹</a>
+        <a href="/equipment">器材購買</a>
+        <a href="/connection/connection1.html">聯絡我們</a>
+        <a href="/loginpage">登入註冊</a>
+    </nav>
+
+    <div class="container">
+        <h1>健身工作坊滿意度調查</h1>
+
+        <form action="/submitFeedback" method="post">
+
+            <h3>填寫日期</h3>
+            <label for="date">造訪日期</label>
+            <input type="date" name="date" id="date">
+
+            <h3>使用時數（小時）</h3>
+            <input type="number" name="duration" id="duration" min="0.5" max="24" step="0.5" placeholder="例：2">
+
+            <h3>請問您今天使用了哪些器材？（可多選）</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="equipment" value="啞鈴"> 啞鈴</label>
+                <label><input type="checkbox" name="equipment" value="槓鈴"> 槓鈴</label>
+                <label><input type="checkbox" name="equipment" value="慢跑機"> 慢跑機</label>
+                <label><input type="checkbox" name="equipment" value="腿推機"> 腿推機</label>
+                <label><input type="checkbox" name="equipment" value="飛輪"> 飛輪</label>
+                <label><input type="checkbox" name="equipment" value="划船機"> 划船機</label>
+                <label><input type="checkbox" name="equipment" value="滑輪機"> 滑輪機</label>
+            </div>
+
+            <h3>您是否對健身器材感到滿意？</h3>
+            <div class="radio-group">
+                <label><input type="radio" name="equipment_satisfied" value="是"> 是</label>
+                <label><input type="radio" name="equipment_satisfied" value="否"> 否</label>
+            </div>
+
+            <h3>對於健身器材的改進意見：</h3>
+            <textarea name="equipment_comments" id="equipment_comments" rows="4" placeholder="請輸入您的建議..."></textarea>
+
+            <h3>您今天上了哪些課程？（可多選）</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="courses" value="上肢課程"> 上肢課程</label>
+                <label><input type="checkbox" name="courses" value="下肢課程"> 下肢課程</label>
+                <label><input type="checkbox" name="courses" value="核心課程"> 核心課程</label>
+                <label><input type="checkbox" name="courses" value="有氧課程"> 有氧課程</label>
+                <label><input type="checkbox" name="courses" value="瑜珈/普拉提/徒步"> 瑜珈/普拉提/徒步</label>
+            </div>
+
+            <h3>您是否覺得健身老師教學良好？</h3>
+            <div class="radio-group">
+                <label><input type="radio" name="teacher_satisfied" value="是"> 是</label>
+                <label><input type="radio" name="teacher_satisfied" value="否"> 否</label>
+            </div>
+
+            <h3>請問您的年齡層：</h3>
+            <select name="age-group" id="age-group">
+                <option value="">-- 請選擇 --</option>
+                <option value="20以下">20 歲以下</option>
+                <option value="20-30">20 - 30 歲</option>
+                <option value="30-40">30 - 40 歲</option>
+                <option value="40-50">40 - 50 歲</option>
+                <option value="50以上">50 歲以上</option>
+            </select>
+
+            <h3>其他意見或建議：</h3>
+            <textarea name="general_comment" id="general_comment" rows="5" placeholder="歡迎留下任何意見..."></textarea>
+
+            <div class="btn-row">
+                <a class="back-btn" href="/connection/connection1.html">返回</a>
+                <input type="submit" value="送出問卷">
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 健身工作坊. All rights reserved.</p>
+    </footer>
+</body>
+</html>

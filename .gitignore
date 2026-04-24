@@ -1,0 +1,17 @@
+node_modules/
+*.db
+*.db-journal
+
+# 測試用殘留檔
+test.html
+test0531.html
+start/
+
+# 未使用的備用登入頁
+class_3_for_sqlite/views/Signlogin.html
+class_3_for_sqlite/views/Signtest.html
+
+# 系統檔
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>購物車 - 健身工作坊</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary:#1D3124; --secondary:#BACEC1; --accent:#27ae60; --light:#f8faf9; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Sans TC',sans-serif; background:var(--light); color:#333; }
+
+    .navbar {
+      background:var(--primary); padding:0 40px;
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.3);
+    }
+    .nav-brand { color:var(--secondary); font-size:20px; font-weight:900; text-decoration:none; padding:16px 0; }
+    .nav-links { display:flex; align-items:center; gap:4px; }
+    .nav-links a { color:#ccc; text-decoration:none; padding:8px 14px; border-radius:6px; font-size:15px; transition:all 0.2s; }
+    .nav-links a:hover { background:rgba(255,255,255,0.15); color:#fff; }
+    .cart-btn { background:var(--accent)!important; color:#fff!important; padding:8px 16px!important; border-radius:20px!important; }
+    .cart-badge { background:#e74c3c; color:#fff; border-radius:50%; font-size:11px; padding:1px 5px; margin-left:4px; display:none; }
+    .login-btn { background:rgba(255,255,255,0.1)!important; border:1px solid rgba(255,255,255,0.3)!important; color:#fff!important; }
+
+    .page-wrap { max-width:960px; margin:0 auto; padding:50px 40px 100px; }
+    .page-title { font-size:32px; font-weight:900; color:var(--primary); margin-bottom:8px; }
+    .page-sub { color:#888; margin-bottom:36px; font-size:15px; }
+
+    .cart-layout { display:grid; grid-template-columns:1fr 340px; gap:28px; align-items:start; }
+
+    /* Cart items */
+    .cart-items { background:#fff; border-radius:16px; box-shadow:0 4px 16px rgba(0,0,0,0.08); overflow:hidden; }
+    .cart-header { padding:18px 24px; background:var(--primary); color:#fff; font-weight:700; font-size:15px; }
+    .cart-item {
+      display:flex; align-items:center; gap:16px;
+      padding:18px 24px; border-bottom:1px solid #f0f0f0;
+      transition:background 0.2s;
+    }
+    .cart-item:hover { background:#fafafa; }
+    .item-icon { font-size:36px; width:50px; text-align:center; flex-shrink:0; }
+    .item-info { flex:1; }
+    .item-name { font-weight:700; font-size:16px; margin-bottom:4px; }
+    .item-type {
+      display:inline-block; background:var(--secondary); color:var(--primary);
+      padding:2px 8px; border-radius:8px; font-size:11px; font-weight:700;
+    }
+    .item-price { color:#e74c3c; font-size:14px; margin-top:4px; }
+    .item-qty { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .qty-btn {
+      width:30px; height:30px; border-radius:50%;
+      border:2px solid var(--secondary); background:#fff;
+      font-size:16px; font-weight:700; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:all 0.2s; color:var(--primary);
+    }
+    .qty-btn:hover { background:var(--primary); color:#fff; border-color:var(--primary); }
+    .qty-num { font-weight:700; font-size:16px; min-width:24px; text-align:center; }
+    .item-subtotal { font-weight:900; font-size:16px; color:var(--primary); min-width:80px; text-align:right; flex-shrink:0; }
+    .item-del { background:none; border:none; color:#ccc; font-size:20px; cursor:pointer; padding:4px; flex-shrink:0; }
+    .item-del:hover { color:#e74c3c; }
+    .cart-empty { padding:60px; text-align:center; color:#aaa; }
+    .cart-empty .empty-icon { font-size:60px; margin-bottom:16px; }
+    .cart-empty p { font-size:16px; margin-bottom:20px; }
+    .btn-outline {
+      display:inline-block; border:2px solid var(--primary);
+      color:var(--primary); padding:10px 24px; border-radius:20px;
+      text-decoration:none; font-weight:700; font-size:14px;
+      transition:all 0.2s;
+    }
+    .btn-outline:hover { background:var(--primary); color:#fff; }
+
+    /* Summary */
+    .cart-summary { background:#fff; border-radius:16px; box-shadow:0 4px 16px rgba(0,0,0,0.08); padding:28px; position:sticky; top:80px; }
+    .summary-title { font-size:18px; font-weight:900; color:var(--primary); margin-bottom:20px; }
+    .summary-row { display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:#555; }
+    .summary-row.total { font-weight:900; font-size:20px; color:var(--primary); padding-top:12px; border-top:2px solid var(--secondary); margin-top:8px; }
+    .btn-checkout {
+      width:100%; background:var(--accent); color:#fff;
+      border:none; padding:16px; border-radius:12px;
+      font-size:17px; font-weight:700; cursor:pointer;
+      font-family:inherit; margin-top:20px;
+      transition:all 0.3s;
+    }
+    .btn-checkout:hover { background:#2ecc71; transform:translateY(-1px); }
+    .btn-checkout:disabled { background:#ccc; cursor:not-allowed; transform:none; }
+    .promo-row { margin-top:16px; display:flex; gap:8px; }
+    .promo-input {
+      flex:1; padding:10px 14px; border:1px solid #ddd;
+      border-radius:8px; font-size:14px; font-family:inherit;
+    }
+    .promo-btn {
+      background:var(--secondary); color:var(--primary);
+      border:none; padding:10px 16px; border-radius:8px;
+      font-size:14px; font-weight:700; cursor:pointer; font-family:inherit;
+    }
+    .promo-msg { font-size:13px; color:var(--accent); margin-top:6px; display:none; }
+
+    /* Checkout Modal */
+    .modal-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,0.6); z-index:200;
+      justify-content:center; align-items:center;
+    }
+    .modal-overlay.active { display:flex; }
+    .modal {
+      background:#fff; border-radius:20px; padding:40px;
+      max-width:480px; width:92%; max-height:90vh; overflow-y:auto;
+    }
+    .modal h3 { font-size:22px; font-weight:900; color:var(--primary); margin-bottom:6px; }
+    .modal .sub { color:#888; font-size:14px; margin-bottom:24px; }
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-size:14px; font-weight:700; color:#555; margin-bottom:6px; }
+    .form-group input, .form-group select {
+      width:100%; padding:12px 16px; border:1px solid #ddd;
+      border-radius:10px; font-size:15px; font-family:inherit;
+      transition:border 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { outline:none; border-color:var(--accent); }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .pay-btn {
+      width:100%; background:var(--accent); color:#fff;
+      border:none; padding:16px; border-radius:12px;
+      font-size:17px; font-weight:700; cursor:pointer;
+      font-family:inherit; margin-top:8px; transition:all 0.3s;
+    }
+    .pay-btn:hover { background:#2ecc71; }
+    .cancel-btn {
+      width:100%; background:none; color:#aaa;
+      border:1px solid #ddd; padding:12px; border-radius:12px;
+      font-size:15px; cursor:pointer; font-family:inherit; margin-top:8px;
+    }
+    .cancel-btn:hover { border-color:#999; color:#666; }
+
+    /* Success */
+    .success-view { text-align:center; padding:20px 0; }
+    .success-icon { font-size:72px; margin-bottom:16px; }
+    .success-view h3 { font-size:24px; font-weight:900; color:var(--primary); margin-bottom:10px; }
+    .success-view p { color:#666; line-height:1.7; margin-bottom:6px; }
+    .order-num { background:var(--light); border-radius:10px; padding:14px; margin:16px 0; font-family:monospace; font-size:18px; font-weight:700; color:var(--primary); }
+    .done-btn {
+      display:inline-block; background:var(--accent); color:#fff;
+      padding:14px 32px; border-radius:20px; text-decoration:none;
+      font-size:16px; font-weight:700; margin-top:16px;
+    }
+
+    footer { background:#111; color:#aaa; text-align:center; padding:24px; font-size:14px; }
+    footer a { color:var(--secondary); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="/start.html">🏋️ 健身工作坊</a>
+  <div class="nav-links">
+    <a href="/start.html">首頁</a>
+    <a href="/index1.html">關於我們</a>
+    <a href="/class/course.html">課程介紹</a>
+    <a href="/equipment">器材購買</a>
+    <a href="/connection/connection1.html">聯絡我們</a>
+    <a href="/cart.html" class="cart-btn">🛒 購物車<span class="cart-badge" id="cart-badge"></span></a>
+    <a href="/loginpage" class="login-btn" id="nav-auth">登入 / 註冊</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-title">🛒 我的購物車</div>
+  <p class="page-sub" id="item-count-label"></p>
+
+  <div class="cart-layout">
+    <!-- Items -->
+    <div class="cart-items">
+      <div class="cart-header">商品明細</div>
+      <div id="cart-list"></div>
+    </div>
+
+    <!-- Summary -->
+    <div class="cart-summary">
+      <div class="summary-title">訂單摘要</div>
+      <div class="summary-row"><span>商品小計</span><span id="sum-subtotal">$0</span></div>
+      <div class="summary-row"><span>折扣</span><span id="sum-discount" style="color:var(--accent)">-$0</span></div>
+      <div class="summary-row"><span>運費</span><span>免費</span></div>
+      <div class="summary-row total"><span>總計</span><span id="sum-total">$0</span></div>
+      <div class="promo-row">
+        <input class="promo-input" id="promo-input" placeholder="輸入折扣碼" maxlength="20">
+        <button class="promo-btn" onclick="applyPromo()">套用</button>
+      </div>
+      <div class="promo-msg" id="promo-msg">✓ 折扣碼 FIT10 已套用，折抵 10%！</div>
+      <button class="btn-checkout" id="checkout-btn" onclick="openCheckout()">前往結帳</button>
+      <div style="text-align:center;margin-top:14px;">
+        <a href="/equipment" style="color:#aaa;font-size:13px;">← 繼續購物</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal">
+    <div id="checkout-form-view">
+      <h3>結帳資訊</h3>
+      <p class="sub">請填寫以下資訊完成購買（示範用，不會真實扣款）</p>
+      <div class="form-group">
+        <label>收件人姓名</label>
+        <input type="text" id="f-name" placeholder="王小明">
+      </div>
+      <div class="form-group">
+        <label>聯絡電話</label>
+        <input type="tel" id="f-phone" placeholder="0912-345-678">
+      </div>
+      <div class="form-group">
+        <label>電子郵件</label>
+        <input type="email" id="f-email" placeholder="example@gmail.com">
+      </div>
+      <div class="form-group">
+        <label>收件地址</label>
+        <input type="text" id="f-addr" placeholder="台北市中正區健身路123號">
+      </div>
+      <div class="form-group">
+        <label>付款方式</label>
+        <select id="f-pay">
+          <option>信用卡</option>
+          <option>ATM 轉帳</option>
+          <option>超商代碼</option>
+          <option>LINE Pay</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>卡號（後四碼）</label>
+          <input type="text" id="f-card" placeholder="1234" maxlength="4">
+        </div>
+        <div class="form-group">
+          <label>有效期限</label>
+          <input type="text" id="f-exp" placeholder="MM/YY" maxlength="5">
+        </div>
+      </div>
+      <button class="pay-btn" onclick="processPayment()">確認付款 <span id="pay-total-label"></span></button>
+      <button class="cancel-btn" onclick="closeCheckout()">取消</button>
+    </div>
+
+    <div id="checkout-success-view" class="success-view" style="display:none;">
+      <div class="success-icon">🎉</div>
+      <h3>付款成功！</h3>
+      <p>感謝您的購買，訂單已建立。</p>
+      <p>確認信已發送至您的信箱。</p>
+      <div class="order-num" id="order-num"></div>
+      <p style="color:#aaa;font-size:13px;">請截圖保存此訂單編號</p>
+      <a class="done-btn" href="/start.html" onclick="clearCart()">返回首頁</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 健身工作坊 &nbsp;|&nbsp; <a href="/connection/connection1.html">聯絡我們</a></p>
+</footer>
+
+<script>
+  let discount = 0;
+
+  function getCart() { return JSON.parse(localStorage.getItem('fw_cart') || '[]'); }
+  function saveCart(c) { localStorage.setItem('fw_cart', JSON.stringify(c)); }
+
+  const typeLabel = { course:'課程', equipment:'器材' };
+  const typeIcon  = { course:'📋', equipment:'🏋️' };
+
+  function renderCart() {
+    const cart = getCart();
+    const list = document.getElementById('cart-list');
+    const badge = document.getElementById('cart-badge');
+    const total = cart.reduce((s,i) => s + i.qty, 0);
+
+    if (total > 0) { badge.textContent = total; badge.style.display = 'inline'; }
+
+    document.getElementById('item-count-label').textContent = cart.length
+      ? '共 ' + total + ' 件商品'
+      : '購物車是空的';
+
+    if (!cart.length) {
+      list.innerHTML = `<div class="cart-empty">
+        <div class="empty-icon">🛒</div>
+        <p>購物車是空的，快去挑選商品吧！</p>
+        <a href="/equipment" class="btn-outline">瀏覽器材</a>
+        &nbsp;
+        <a href="/class/course.html" class="btn-outline">瀏覽課程</a>
+      </div>`;
+      document.getElementById('checkout-btn').disabled = true;
+      updateSummary(0);
+      return;
+    }
+
+    document.getElementById('checkout-btn').disabled = false;
+    let html = '';
+    cart.forEach((item, idx) => {
+      html += `<div class="cart-item">
+        <div class="item-icon">${typeIcon[item.type] || '📦'}</div>
+        <div class="item-info">
+          <div class="item-name">${item.name}</div>
+          <span class="item-type">${typeLabel[item.type] || item.type}</span>
+          <div class="item-price">單價 $${item.price.toLocaleString()}</div>
+        </div>
+        <div class="item-qty">
+          <button class="qty-btn" onclick="changeQty(${idx}, -1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+        </div>
+        <div class="item-subtotal">$${(item.price * item.qty).toLocaleString()}</div>
+        <button class="item-del" onclick="removeItem(${idx})" title="刪除">✕</button>
+      </div>`;
+    });
+    list.innerHTML = html;
+
+    const subtotal = cart.reduce((s,i) => s + i.price * i.qty, 0);
+    updateSummary(subtotal);
+  }
+
+  function updateSummary(subtotal) {
+    const disc = Math.floor(subtotal * discount);
+    const total = subtotal - disc;
+    document.getElementById('sum-subtotal').textContent = '$' + subtotal.toLocaleString();
+    document.getElementById('sum-discount').textContent = '-$' + disc.toLocaleString();
+    document.getElementById('sum-total').textContent = '$' + total.toLocaleString();
+    document.getElementById('pay-total-label').textContent = '($' + total.toLocaleString() + ')';
+  }
+
+  function changeQty(idx, delta) {
+    let cart = getCart();
+    cart[idx].qty = Math.max(1, cart[idx].qty + delta);
+    saveCart(cart); renderCart();
+  }
+
+  function removeItem(idx) {
+    let cart = getCart();
+    cart.splice(idx, 1);
+    saveCart(cart); renderCart();
+  }
+
+  function applyPromo() {
+    const code = document.getElementById('promo-input').value.trim().toUpperCase();
+    const msg = document.getElementById('promo-msg');
+    if (code === 'FIT10') {
+      discount = 0.1;
+      msg.textContent = '✓ 折扣碼 FIT10 已套用，折抵 10%！';
+      msg.style.display = 'block';
+      const cart = getCart();
+      const subtotal = cart.reduce((s,i) => s + i.price * i.qty, 0);
+      updateSummary(subtotal);
+    } else if (code === 'WELCOME') {
+      discount = 0.15;
+      msg.textContent = '✓ 新會員折扣 WELCOME 已套用，折抵 15%！';
+      msg.style.display = 'block';
+      const cart = getCart();
+      const subtotal = cart.reduce((s,i) => s + i.price * i.qty, 0);
+      updateSummary(subtotal);
+    } else {
+      msg.textContent = '✗ 折扣碼無效';
+      msg.style.color = '#e74c3c';
+      msg.style.display = 'block';
+    }
+  }
+
+  function openCheckout() { document.getElementById('checkout-modal').classList.add('active'); }
+  function closeCheckout() {
+    document.getElementById('checkout-modal').classList.remove('active');
+    document.getElementById('checkout-form-view').style.display = '';
+    document.getElementById('checkout-success-view').style.display = 'none';
+  }
+
+  function processPayment() {
+    const name = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    if (!name || !phone) { alert('請填寫姓名與電話'); return; }
+
+    const cart = getCart();
+    const subtotal = cart.reduce((s,i) => s + i.price * i.qty, 0);
+    const disc = Math.floor(subtotal * discount);
+    const total = subtotal - disc;
+
+    // 累計消費金額
+    const prev = parseInt(localStorage.getItem('fw_total_spending') || '0');
+    localStorage.setItem('fw_total_spending', prev + total);
+
+    // 儲存訂單
+    const orders = JSON.parse(localStorage.getItem('fw_orders') || '[]');
+    const orderNum = 'FW' + Date.now().toString().slice(-8).toUpperCase();
+    orders.unshift({ id: orderNum, items: cart, total, date: new Date().toLocaleString('zh-TW'), timestamp: Date.now() });
+    localStorage.setItem('fw_orders', JSON.stringify(orders));
+
+    // 寫入活動紀錄
+    const acts = JSON.parse(localStorage.getItem('fw_activity') || '[]');
+    cart.forEach(item => {
+      acts.unshift({
+        icon: item.type === 'course' ? '📚' : '🛒',
+        title: (item.type === 'course' ? '報名課程：' : '購買器材：') + item.name,
+        badge: '已付款',
+        timestamp: Date.now()
+      });
+    });
+    localStorage.setItem('fw_activity', JSON.stringify(acts));
+
+    document.getElementById('order-num').textContent = '訂單編號：' + orderNum;
+    document.getElementById('checkout-form-view').style.display = 'none';
+    document.getElementById('checkout-success-view').style.display = '';
+  }
+
+  function clearCart() {
+    localStorage.removeItem('fw_cart');
+  }
+
+  // Auth state
+  fetch('/session-user').then(r=>r.json()).then(d=>{
+    const a = document.getElementById('nav-auth');
+    if(d.loggedIn){ a.href='/start1.html'; a.textContent='👤 '+d.user.帳號; }
+  }).catch(()=>{});
+
+  // Init
+  renderCart();
+</script>
+</body>
+</html>

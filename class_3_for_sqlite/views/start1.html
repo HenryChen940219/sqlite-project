@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>會員中心 - 健身工作坊</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary:#1D3124; --secondary:#BACEC1; --accent:#27ae60; --light:#f8faf9; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Sans TC',sans-serif; background:var(--light); color:#333; min-height:100vh; }
+
+    .navbar {
+      background:var(--primary); padding:0 40px;
+      display:flex; align-items:center; justify-content:space-between;
+      box-shadow:0 2px 10px rgba(0,0,0,0.3);
+    }
+    .nav-brand { color:var(--secondary); font-size:20px; font-weight:900; text-decoration:none; padding:16px 0; }
+    .nav-links { display:flex; align-items:center; gap:4px; }
+    .nav-links a { color:#ccc; text-decoration:none; padding:8px 14px; border-radius:6px; font-size:15px; transition:all 0.2s; }
+    .nav-links a:hover { background:rgba(255,255,255,0.15); color:#fff; }
+    .cart-btn { background:var(--accent)!important; color:#fff!important; padding:8px 16px!important; border-radius:20px!important; }
+    .cart-badge { background:#e74c3c; color:#fff; border-radius:50%; font-size:11px; padding:1px 5px; margin-left:4px; display:none; }
+    .logout-btn { color:#e74c3c!important; border:1px solid rgba(231,76,60,0.4)!important; border-radius:6px; }
+    .logout-btn:hover { background:rgba(231,76,60,0.1)!important; }
+
+    /* Welcome Banner */
+    .welcome-banner {
+      background:linear-gradient(135deg, var(--primary) 0%, #2d5a3d 100%);
+      padding:50px 60px;
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:20px;
+    }
+    .welcome-text h1 { font-size:32px; font-weight:900; color:#fff; margin-bottom:8px; }
+    .welcome-text h1 span { color:var(--secondary); }
+    .welcome-text p { color:rgba(255,255,255,0.75); font-size:15px; }
+    .welcome-stats { display:flex; gap:16px; flex-wrap:wrap; }
+    .stat-box {
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.2);
+      border-radius:12px; padding:16px 24px; text-align:center;
+    }
+    .stat-box .num { font-size:28px; font-weight:900; color:var(--secondary); }
+    .stat-box .lbl { color:rgba(255,255,255,0.7); font-size:12px; margin-top:2px; }
+
+    /* Main Grid */
+    .main-wrap { max-width:1100px; margin:0 auto; padding:50px 40px 80px; }
+    .section-title { font-size:22px; font-weight:900; color:var(--primary); margin-bottom:20px; }
+
+    /* Quick Actions */
+    .actions-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+      gap:18px; margin-bottom:50px;
+    }
+    .action-card {
+      background:#fff; border-radius:16px;
+      padding:28px 20px; text-align:center;
+      box-shadow:0 4px 16px rgba(0,0,0,0.07);
+      text-decoration:none; color:inherit;
+      transition:transform 0.3s, box-shadow 0.3s;
+      border-top:4px solid transparent;
+    }
+    .action-card:hover { transform:translateY(-5px); box-shadow:0 10px 28px rgba(0,0,0,0.12); }
+    .action-icon { font-size:44px; margin-bottom:14px; }
+    .action-card h3 { font-size:16px; font-weight:700; color:var(--primary); margin-bottom:6px; }
+    .action-card p { font-size:13px; color:#888; line-height:1.5; }
+
+    /* Profile Section */
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .card { background:#fff; border-radius:16px; padding:28px; box-shadow:0 4px 16px rgba(0,0,0,0.07); }
+    .card h3 { font-size:17px; font-weight:700; color:var(--primary); margin-bottom:18px; border-bottom:2px solid var(--secondary); padding-bottom:10px; }
+    .info-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:15px; }
+    .info-row:last-child { border:none; }
+    .info-label { color:#888; }
+    .info-value { font-weight:700; }
+
+    /* VIP Progress */
+    .vip-bar-wrap { margin:14px 0 4px; }
+    .vip-bar-label { display:flex; justify-content:space-between; font-size:13px; color:#888; margin-bottom:6px; }
+    .vip-bar-bg { background:#f0f0f0; border-radius:10px; height:10px; overflow:hidden; }
+    .vip-bar-fill { height:100%; border-radius:10px; background:linear-gradient(90deg, var(--accent), #2ecc71); transition:width 0.6s ease; }
+
+    /* Recent */
+    .activity-item {
+      display:flex; align-items:center; gap:14px;
+      padding:12px 0; border-bottom:1px solid #f5f5f5;
+    }
+    .activity-item:last-child { border:none; }
+    .act-icon { font-size:28px; width:42px; text-align:center; flex-shrink:0; }
+    .act-text { flex:1; }
+    .act-title { font-weight:700; font-size:15px; }
+    .act-time { color:#aaa; font-size:13px; margin-top:2px; }
+    .act-badge {
+      background:var(--secondary); color:var(--primary);
+      padding:3px 10px; border-radius:10px; font-size:12px; font-weight:700;
+    }
+    .act-badge.paid { background:#d5f5e3; color:#1e8449; }
+    .act-badge.done { background:var(--secondary); color:var(--primary); }
+    .act-empty { color:#aaa; font-size:14px; text-align:center; padding:20px 0; }
+
+    /* Password modal */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; justify-content:center; align-items:center; }
+    .modal-overlay.active { display:flex; }
+    .modal { background:#fff; border-radius:16px; padding:36px; max-width:400px; width:92%; }
+    .modal h3 { font-size:20px; font-weight:900; color:var(--primary); margin-bottom:20px; }
+    .form-group { margin-bottom:16px; }
+    .form-group label { display:block; font-size:14px; font-weight:700; color:#555; margin-bottom:6px; }
+    .form-group input { width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; font-size:15px; font-family:inherit; }
+    .form-group input:focus { outline:none; border-color:var(--accent); }
+    .modal-btn { width:100%; background:var(--accent); color:#fff; border:none; padding:14px; border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit; margin-top:4px; }
+    .modal-cancel { width:100%; background:none; border:1px solid #ddd; color:#888; padding:12px; border-radius:10px; font-size:15px; cursor:pointer; font-family:inherit; margin-top:8px; }
+
+    footer { background:#111; color:#aaa; text-align:center; padding:24px; font-size:14px; }
+    footer a { color:var(--secondary); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="/start.html">🏋️ 健身工作坊</a>
+  <div class="nav-links">
+    <a href="/start.html">首頁</a>
+    <a href="/index1.html">關於我們</a>
+    <a href="/class/course.html">課程介紹</a>
+    <a href="/equipment">器材購買</a>
+    <a href="/connection/connection1.html">聯絡我們</a>
+    <a href="/cart.html" class="cart-btn">🛒 購物車<span class="cart-badge" id="cart-badge"></span></a>
+    <a href="/logout" class="logout-btn">登出</a>
+  </div>
+</nav>
+
+<!-- Welcome Banner -->
+<div class="welcome-banner">
+  <div class="welcome-text">
+    <h1>歡迎回來，<span id="username-display">會員</span>！</h1>
+    <p>今天也一起來健身吧 💪 你的下一個突破就在今天。</p>
+  </div>
+  <div class="welcome-stats">
+    <div class="stat-box"><div class="num" id="cart-count-stat">0</div><div class="lbl">購物車商品</div></div>
+    <div class="stat-box"><div class="num">5</div><div class="lbl">可選課程</div></div>
+    <div class="stat-box"><div class="num">4</div><div class="lbl">專業教練</div></div>
+  </div>
+</div>
+
+<div class="main-wrap">
+
+  <!-- Quick Actions -->
+  <div class="section-title">快速功能</div>
+  <div class="actions-grid">
+    <a href="/class/course.html" class="action-card" style="border-top-color:#3498db;">
+      <div class="action-icon">📚</div>
+      <h3>瀏覽課程</h3>
+      <p>探索上肢、下肢、核心等多元課程</p>
+    </a>
+    <a href="/equipment" class="action-card" style="border-top-color:#27ae60;">
+      <div class="action-icon">🏋️</div>
+      <h3>購買器材</h3>
+      <p>精選健身器材，在家也能專業訓練</p>
+    </a>
+    <a href="/cart.html" class="action-card" style="border-top-color:#e67e22;">
+      <div class="action-icon">🛒</div>
+      <h3>我的購物車</h3>
+      <p>查看已選商品，前往結帳</p>
+    </a>
+    <a href="/connection/comment.html" class="action-card" style="border-top-color:#9b59b6;">
+      <div class="action-icon">📝</div>
+      <h3>填寫問卷</h3>
+      <p>分享你的健身體驗與意見</p>
+    </a>
+    <a href="/index1.html" class="action-card" style="border-top-color:#e74c3c;">
+      <div class="action-icon">👥</div>
+      <h3>認識教練</h3>
+      <p>了解專業教練團隊的背景</p>
+    </a>
+    <a href="/connection/connection1.html" class="action-card" style="border-top-color:#1abc9c;">
+      <div class="action-icon">📞</div>
+      <h3>聯絡我們</h3>
+      <p>有任何問題歡迎隨時聯繫</p>
+    </a>
+  </div>
+
+  <!-- Profile + Activity -->
+  <div class="two-col">
+    <div class="card">
+      <h3>👤 我的帳號資訊</h3>
+      <div class="info-row"><span class="info-label">帳號</span><span class="info-value" id="profile-acc">—</span></div>
+      <div class="info-row"><span class="info-label">電子郵件</span><span class="info-value" id="profile-email">—</span></div>
+      <div class="info-row">
+        <span class="info-label">會員等級</span>
+        <span class="info-value" id="member-level">⭐ 一般會員</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">累計消費金額</span>
+        <span class="info-value" id="total-spending">$0</span>
+      </div>
+      <div class="info-row"><span class="info-label">加入日期</span><span class="info-value">2024年</span></div>
+
+      <!-- VIP 進度條 -->
+      <div class="vip-bar-wrap" id="vip-progress-wrap">
+        <div class="vip-bar-label">
+          <span>距離 VIP 還差</span>
+          <span id="vip-remaining"></span>
+        </div>
+        <div class="vip-bar-bg">
+          <div class="vip-bar-fill" id="vip-bar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <button onclick="document.getElementById('pw-modal').classList.add('active')"
+        style="margin-top:20px;background:none;border:1px solid var(--secondary);color:var(--primary);padding:10px 20px;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;font-weight:700;">
+        修改密碼
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>📋 近期活動紀錄</h3>
+      <div id="activity-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal-overlay" id="pw-modal">
+  <div class="modal">
+    <h3>修改密碼</h3>
+    <div class="form-group">
+      <label>目前密碼</label>
+      <input type="password" id="pw-old" placeholder="輸入目前密碼">
+    </div>
+    <div class="form-group">
+      <label>新密碼</label>
+      <input type="password" id="pw-new" placeholder="輸入新密碼">
+    </div>
+    <div class="form-group">
+      <label>確認新密碼</label>
+      <input type="password" id="pw-confirm" placeholder="再次輸入新密碼">
+    </div>
+    <button class="modal-btn" onclick="changePw()">確認修改</button>
+    <button class="modal-cancel" onclick="document.getElementById('pw-modal').classList.remove('active')">取消</button>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 健身工作坊 &nbsp;|&nbsp; <a href="/connection/connection1.html">聯絡我們</a></p>
+</footer>
+
+<script>
+  const VIP_THRESHOLD = 10000;
+
+  // Cart badge
+  const cart = JSON.parse(localStorage.getItem('fw_cart') || '[]');
+  const cartCount = cart.reduce((s,i) => s + i.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (cartCount > 0) { badge.textContent = cartCount; badge.style.display = 'inline'; }
+  document.getElementById('cart-count-stat').textContent = cartCount;
+
+  // 消費金額 & VIP
+  function updateSpendingUI() {
+    const spending = parseInt(localStorage.getItem('fw_total_spending') || '0');
+    document.getElementById('total-spending').textContent = '$' + spending.toLocaleString();
+
+    const isVIP = spending >= VIP_THRESHOLD;
+    const levelEl = document.getElementById('member-level');
+    if (isVIP) {
+      levelEl.innerHTML = '👑 <span style="color:#e67e22;font-weight:900;">VIP 會員</span>';
+      document.getElementById('vip-progress-wrap').style.display = 'none';
+    } else {
+      levelEl.innerHTML = '⭐ <span style="color:var(--accent);">一般會員</span>';
+      const pct = Math.min(100, Math.round(spending / VIP_THRESHOLD * 100));
+      const remaining = VIP_THRESHOLD - spending;
+      document.getElementById('vip-bar').style.width = pct + '%';
+      document.getElementById('vip-remaining').textContent = '$' + remaining.toLocaleString() + '（升級 VIP）';
+    }
+  }
+
+  // 動態活動紀錄
+  function renderActivity() {
+    const acts = JSON.parse(localStorage.getItem('fw_activity') || '[]');
+    const el = document.getElementById('activity-list');
+    if (!acts.length) {
+      el.innerHTML = '<div class="act-empty">尚無活動紀錄，快去選購課程或器材吧！</div>';
+      return;
+    }
+    const show = acts.slice(0, 6);
+    el.innerHTML = show.map(a => {
+      const d = new Date(a.timestamp);
+      const timeStr = d.toLocaleString('zh-TW', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' });
+      const badgeClass = a.badge === '已付款' ? 'paid' : 'done';
+      return `<div class="activity-item">
+        <div class="act-icon">${a.icon}</div>
+        <div class="act-text">
+          <div class="act-title">${a.title}</div>
+          <div class="act-time">${timeStr}</div>
+        </div>
+        <span class="act-badge ${badgeClass}">${a.badge}</span>
+      </div>`;
+    }).join('');
+  }
+
+  // Session check
+  fetch('/session-user').then(r => r.json()).then(data => {
+    if (!data.loggedIn) {
+      window.location.href = '/loginpage';
+      return;
+    }
+    document.getElementById('username-display').textContent = data.user.帳號;
+    document.getElementById('profile-acc').textContent = data.user.帳號;
+    document.getElementById('profile-email').textContent = data.user.信箱 || '未設定';
+    updateSpendingUI();
+    renderActivity();
+  }).catch(() => { window.location.href = '/loginpage'; });
+
+  function changePw() {
+    const oldPw = document.getElementById('pw-old').value;
+    const newPw = document.getElementById('pw-new').value;
+    const confirmPw = document.getElementById('pw-confirm').value;
+    if (!oldPw || !newPw) { alert('請填寫所有欄位'); return; }
+    if (newPw !== confirmPw) { alert('新密碼與確認密碼不符'); return; }
+    alert('密碼修改成功！（示範模式）');
+    document.getElementById('pw-modal').classList.remove('active');
+    document.getElementById('pw-old').value = '';
+    document.getElementById('pw-new').value = '';
+    document.getElementById('pw-confirm').value = '';
+  }
+</script>
+</body>
+</html>

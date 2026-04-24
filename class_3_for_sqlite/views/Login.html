@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登入 - 健身工作坊</title>
+  <style>
+    @keyframes border-glow {
+      0%   { box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #0ff; }
+      50%  { box-shadow: 0 0 10px #0f9b8e, 0 0 20px #0f9b8e, 0 0 30px #0f9b8e; }
+      100% { box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #0ff; }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; background: #141414;
+      font-family: Arial, sans-serif; color: #fff;
+    }
+    .wrapper {
+      width: 400px; padding: 40px;
+      background: rgba(0,0,0,0.75);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,255,255,0.5);
+      animation: border-glow 3s linear infinite;
+      text-align: center;
+    }
+    .wrapper h2 {
+      margin-bottom: 28px; font-size: 24px; color: #0f9b8e;
+      text-shadow: 0 0 5px #0f9b8e, 0 0 10px #0f9b8e, 0 0 15px #0f9b8e;
+    }
+    .input-group { position: relative; margin-bottom: 30px; }
+    .input-group input {
+      width: 100%; padding: 10px;
+      background: transparent; border: none;
+      border-bottom: 2px solid #0f9b8e;
+      color: #fff; outline: none; font-size: 16px;
+      transition: all 0.3s;
+    }
+    .input-group input:focus {
+      border-bottom: 2px solid #0ff;
+      box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #0ff;
+    }
+    .input-group label {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none; transition: all 0.3s; color: #0f9b8e;
+    }
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label {
+      top: -10px; left: 0; font-size: 12px; color: #0ff;
+    }
+    .remember { margin-bottom: 20px; font-size: 14px; }
+    .remember input { margin-right: 8px; cursor: pointer; }
+    button {
+      width: 100%; padding: 10px; background: #0f9b8e;
+      border: none; border-radius: 5px; cursor: pointer;
+      font-size: 16px; color: #fff; transition: all 0.3s;
+    }
+    button:hover {
+      background: #0ff; color: #141414;
+      box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #0ff;
+    }
+    .link-row { margin-top: 20px; font-size: 14px; }
+    .link-row a { color: #0ff; text-decoration: none; transition: color 0.3s; }
+    .link-row a:hover { color: #0f9b8e; }
+    .error-msg { color: #ff6b6b; font-size: 13px; margin-top: 10px; display: none; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>Login</h2>
+    <div class="input-group">
+      <input type="text" id="loginUsername" required placeholder="Username">
+    </div>
+    <div class="input-group">
+      <input type="password" id="loginPassword" required placeholder="Password">
+    </div>
+    <div class="remember">
+      <label><input type="checkbox"> Remember me</label>
+    </div>
+    <button type="button" onclick="login()">Login</button>
+    <p class="error-msg" id="error-msg">帳號或密碼錯誤，請重試。</p>
+    <div class="link-row">
+      <p>Don't have an account? <a href="/user">Sign Up</a></p>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errEl = document.getElementById('error-msg');
+      errEl.style.display = 'none';
+
+      if (!username || !password) {
+        errEl.textContent = '請輸入帳號和密碼';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 帳號: username, 密碼: password })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = '/start1.html';
+        } else {
+          errEl.textContent = '帳號或密碼錯誤，請重試。';
+          errEl.style.display = 'block';
+        }
+      })
+      .catch(() => {
+        errEl.textContent = '連線失敗，請稍後再試。';
+        errEl.style.display = 'block';
+      });
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') login();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>器材購買 - 健身工作坊</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary:#1D3124; --secondary:#BACEC1; --accent:#27ae60; --light:#f8faf9; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Sans TC',sans-serif; background:var(--light); color:#333; }
+
+    .navbar {
+      background:var(--primary); padding:0 40px;
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.3);
+    }
+    .nav-brand { color:var(--secondary); font-size:20px; font-weight:900; text-decoration:none; padding:16px 0; }
+    .nav-links { display:flex; align-items:center; gap:4px; }
+    .nav-links a { color:#ccc; text-decoration:none; padding:8px 14px; border-radius:6px; font-size:15px; transition:all 0.2s; }
+    .nav-links a:hover { background:rgba(255,255,255,0.15); color:#fff; }
+    .nav-links a.active { color:#fff; font-weight:700; }
+    .cart-btn { background:var(--accent)!important; color:#fff!important; padding:8px 16px!important; border-radius:20px!important; position:relative; }
+    .cart-badge { background:#e74c3c; color:#fff; border-radius:50%; font-size:11px; padding:1px 5px; margin-left:4px; display:none; }
+    .login-btn { background:rgba(255,255,255,0.1)!important; border:1px solid rgba(255,255,255,0.3)!important; color:#fff!important; }
+
+    .page-hero {
+      background:linear-gradient(135deg,var(--primary),#2d5a3d);
+      padding:70px 60px; text-align:center; color:#fff;
+    }
+    .page-hero h1 { font-size:42px; font-weight:900; margin-bottom:14px; }
+    .page-hero h1 span { color:var(--secondary); }
+    .page-hero p { color:rgba(255,255,255,0.8); font-size:16px; max-width:550px; margin:0 auto; line-height:1.8; }
+
+    /* Filter */
+    .filter-bar {
+      display:flex; justify-content:center; gap:10px;
+      flex-wrap:wrap; padding:30px 40px 0;
+    }
+    .filter-btn {
+      background:#fff; border:2px solid var(--secondary);
+      color:var(--primary); padding:8px 20px; border-radius:20px;
+      font-size:14px; font-weight:700; cursor:pointer;
+      font-family:inherit; transition:all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background:var(--primary); color:#fff; border-color:var(--primary);
+    }
+
+    /* Products */
+    .products {
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      gap:24px; padding:30px 60px 80px; max-width:1300px; margin:0 auto;
+    }
+    .card {
+      background:#fff; border-radius:16px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.09);
+      overflow:hidden; transition:transform 0.3s, box-shadow 0.3s;
+      display:flex; flex-direction:column;
+    }
+    .card:hover { transform:translateY(-5px); box-shadow:0 10px 28px rgba(0,0,0,0.14); }
+    .card-img {
+      height:160px; display:flex;
+      align-items:center; justify-content:center; font-size:60px;
+    }
+    .card-body { padding:18px; flex:1; }
+    .card-category {
+      display:inline-block; background:var(--secondary); color:var(--primary);
+      padding:3px 10px; border-radius:10px; font-size:11px; font-weight:700; margin-bottom:8px;
+    }
+    .card-body h3 { font-size:17px; font-weight:700; margin-bottom:8px; color:var(--primary); }
+    .card-body p { font-size:13px; color:#666; line-height:1.6; }
+    .card-footer {
+      padding:14px 18px; display:flex;
+      justify-content:space-between; align-items:center;
+      border-top:1px solid #f0f0f0;
+    }
+    .price { font-size:20px; font-weight:900; color:#e74c3c; }
+    .btn-add {
+      background:var(--accent); color:#fff;
+      border:none; border-radius:20px; padding:8px 18px;
+      font-size:14px; font-weight:700; cursor:pointer;
+      font-family:inherit; transition:all 0.2s;
+    }
+    .btn-add:hover { background:#2ecc71; transform:scale(1.05); }
+    .btn-add.added { background:#95a5a6; }
+
+    /* Toast */
+    .toast {
+      position:fixed; bottom:30px; right:30px;
+      background:var(--primary); color:#fff;
+      padding:14px 24px; border-radius:12px;
+      font-size:15px; font-weight:500;
+      box-shadow:0 4px 20px rgba(0,0,0,0.2);
+      transform:translateY(80px); opacity:0;
+      transition:all 0.3s; z-index:300;
+      display:flex; align-items:center; gap:10px;
+    }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .toast a { color:var(--secondary); font-weight:700; text-decoration:none; }
+
+    footer { background:#111; color:#aaa; text-align:center; padding:24px; font-size:14px; }
+    footer a { color:var(--secondary); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="/start.html">🏋️  健身工作坊</a>
+  <div class="nav-links">
+    <a href="/start.html">首頁</a>
+    <a href="/index1.html">關於我們</a>
+    <a href="/class/course.html">課程介紹</a>
+    <a href="/equipment" class="active">器材購買</a>
+    <a href="/connection/connection1.html">聯絡我們</a>
+    <a href="/cart.html" class="cart-btn">🛒 購物車<span class="cart-badge" id="cart-badge"></span></a>
+    <a href="/loginpage" class="login-btn" id="nav-auth">登入 / 註冊</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <h1>專業<span>健身器材</span>購買</h1>
+  <p>頂級健身器材，讓你在家也能享受專業訓練水準</p>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all',this)">全部商品</button>
+  <button class="filter-btn" onclick="filter('重量訓練',this)">重量訓練</button>
+  <button class="filter-btn" onclick="filter('有氧訓練',this)">有氧訓練</button>
+  <button class="filter-btn" onclick="filter('核心/瑜珈',this)">核心 / 瑜珈</button>
+  <button class="filter-btn" onclick="filter('全身訓練',this)">全身訓練</button>
+</div>
+
+<div class="products" id="products-grid">
+
+  <div class="card" data-cat="重量訓練">
+    <div class="card-img" style="background:#fff8e1;">🏋️</div>
+    <div class="card-body">
+      <span class="card-category">重量訓練</span>
+      <h3>專業啞鈴組（2～30kg）</h3>
+      <p>鑄鐵材質，防滑橡膠手柄，含收納架，適合各種力量訓練動作。</p>
+    </div>
+    <div class="card-footer">
+      <span class="price">$8,500</span>
+      <button class="btn-add" onclick="addToCart('專業啞鈴組', 8500, '重量訓練', this)">加入購物車</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="有氧訓練">
+    <div class="card-img" style="background:#e8f5e9;">🏃</div>
+    <div class="card-body">
+      <span class="card-category">有氧訓練</span>
+      <h3>折疊式慢跑機</h3>
+      <p>靜音馬達，12段坡度，最高時速18km/h，可折疊省空間。</p>
+    </div>
+    <div class="card-footer">
+      <span class="price">$25,000</span>
+      <button class="btn-add" onclick="addToCart('折疊式慢跑機', 25000, '有氧訓練', this)">加入購物車</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="有氧訓練">
+    <div class="card-img" style="background:#e3f2fd;">🚴</div>
+    <div class="card-body">
+      <span class="card-category">有氧訓練</span>
+      <h3>室內磁控飛輪車</h3>
+      <p>20段阻力，心率感應，LCD顯示卡路里、速度、距離。</p>
+    </div>
+    <div class="card-footer">
+      <span class="price">$12,800</span>
+      <button class="btn-add" onclick="addToCart('室內磁控飛輪車', 12800, '有氧訓練', this)">加入購物車</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="重量訓練">
+    <div class="card-img" style="background:#fce4ec;">💪</div>
+    <div class="card-body">
+      <span class="card-category">重量訓練</span>
+      <h3>奧林匹克槓鈴組</h3>
+      <p>20kg標準槓鈴 + 100kg配重片，適合深蹲、硬舉、臥推。</p>
+    </div>
+    <div class="card-footer">
+      <span class="price">$18,500</span>
+      <button class="btn-add" onclick="addToCart('奧林匹克槓鈴組', 18500, '重量訓練', this)">加入購物車</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="核心/瑜珈">
+    <div class="card-img" style="background:#f3e5f5;">🧘</div>
+    <div class="card-body">
+      <span class="card-category">核心/瑜珈</span>
+      <h3>瑜珈墊豪華組</h3>
+      <p>厚度10mm，TPE環保材質，防滑防水，含背袋與瑜珈磚兩個。</p>
+    </div>
+    <div class="card-footer">
+      <span class="price">$1,200</span>
+      <button class="btn-add" onclick="addToCart('瑜珈墊豪華組', 1200, '核心/瑜珈', this)">加入購物車</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="全身訓練">
+    <div class="card-img" style="background:#e0f7fa;">🪜</div>
+    <div class="card-body">
+      <span class="card-category">全身訓練</span>
+      <h3>多功能力量訓練架</h3>
+      <p>鋼製結構，深蹲架＋引體向上桿＋繩索組，承重300kg。</p>
+    </div>
+    <div class="card-footer">
+      <span class="price">$35,000</span>
+      <button class="btn-add" onclick="addToCart('多功能力量訓練架', 35000, '全身訓練', this)">加入購物車</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="有氧訓練">
+    <div class="card-img" style="background:#fff9c4;">🚣</div>
+    <div class="card-body">
+      <span class="card-category">有氧訓練</span>
+      <h3>磁控划船機</h3>
+      <p>8段阻力，低噪音設計，訓練全身肌群，附LCD顯示器。</p>
+    </div>
+    <div class="card-footer">
+      <span class="price">$14,500</span>
+      <button class="btn-add" onclick="addToCart('磁控划船機', 14500, '有氧訓練', this)">加入購物車</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="核心/瑜珈">
+    <div class="card-img" style="background:#f1f8e9;">🔵</div>
+    <div class="card-body">
+      <span class="card-category">核心/瑜珈</span>
+      <h3>健身彈力帶組（5條）</h3>
+      <p>5種阻力等級，天然橡膠材質，適合居家訓練、物理治療復健。</p>
+    </div>
+    <div class="card-footer">
+      <span class="price">$680</span>
+      <button class="btn-add" onclick="addToCart('健身彈力帶組', 680, '核心/瑜珈', this)">加入購物車</button>
+    </div>
+  </div>
+
+  <div class="card" data-cat="重量訓練">
+    <div class="card-img" style="background:#fff3e0;">⚖️</div>
+    <div class="card-body">
+      <span class="card-category">重量訓練</span>
+      <h3>可調式啞鈴（單支）</h3>
+      <p>一支替代15種重量（2.5kg～24kg），快速旋轉調節，節省空間。</p>
+    </div>
+    <div class="card-footer">
+      <span class="price">$6,800</span>
+      <button class="btn-add" onclick="addToCart('可調式啞鈴', 6800, '重量訓練', this)">加入購物車</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-msg"></span>
+  <a href="/cart.html">查看購物車 →</a>
+</div>
+
+<footer>
+  <p>&copy; 2024 健身工作坊 &nbsp;|&nbsp; <a href="/connection/connection1.html">聯絡我們</a></p>
+</footer>
+
+<script>
+  // Nav init
+  const initCart = JSON.parse(localStorage.getItem('fw_cart') || '[]');
+  const initCount = initCart.reduce((s,i) => s + i.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (initCount > 0) { badge.textContent = initCount; badge.style.display = 'inline'; }
+  fetch('/session-user').then(r=>r.json()).then(d=>{
+    const a = document.getElementById('nav-auth');
+    if(d.loggedIn){ a.href='/start1.html'; a.textContent='👤 '+d.user.帳號; }
+  }).catch(()=>{});
+
+  // Add to cart
+  function addToCart(name, price, cat, btn) {
+    let cart = JSON.parse(localStorage.getItem('fw_cart') || '[]');
+    const idx = cart.findIndex(i => i.name === name && i.type === 'equipment');
+    if (idx >= 0) { cart[idx].qty += 1; }
+    else { cart.push({ name, price, qty:1, type:'equipment', cat }); }
+    localStorage.setItem('fw_cart', JSON.stringify(cart));
+
+    const total = cart.reduce((s,i) => s + i.qty, 0);
+    badge.textContent = total; badge.style.display = 'inline';
+
+    btn.textContent = '✓ 已加入'; btn.classList.add('added');
+    setTimeout(() => { btn.textContent = '加入購物車'; btn.classList.remove('added'); }, 2000);
+
+    showToast('「' + name + '」已加入購物車');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Filter
+  function filter(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.card').forEach(c => {
+      c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>

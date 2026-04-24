@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>聯絡我們 - 健身工作坊</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary:#1D3124; --secondary:#BACEC1; --accent:#27ae60; --light:#f8faf9; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Sans TC',sans-serif; background:var(--light); color:#333; min-height:100vh; }
+
+    .navbar { background:var(--primary); padding:0 40px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.3); }
+    .nav-brand { color:var(--secondary); font-size:20px; font-weight:900; text-decoration:none; padding:16px 0; }
+    .nav-links { display:flex; align-items:center; gap:4px; }
+    .nav-links a { color:#ccc; text-decoration:none; padding:8px 14px; border-radius:6px; font-size:15px; transition:all 0.2s; }
+    .nav-links a:hover { background:rgba(255,255,255,0.15); color:#fff; }
+    .nav-links a.active { color:#fff; }
+    .cart-btn { background:var(--accent)!important; color:#fff!important; padding:8px 16px!important; border-radius:20px!important; }
+    .cart-badge { background:#e74c3c; color:#fff; border-radius:50%; font-size:11px; padding:1px 5px; margin-left:4px; display:none; }
+    .login-btn { background:rgba(255,255,255,0.1)!important; border:1px solid rgba(255,255,255,0.3)!important; color:#fff!important; }
+
+    .container {
+      max-width:600px; margin:60px auto 100px;
+      padding:40px; background:#fff;
+      border-radius:16px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.08);
+    }
+    h2 { text-align:center; color:var(--primary); font-size:26px; font-weight:900; margin-bottom:28px; }
+    .contact-info {
+      margin-bottom:24px; background:var(--light);
+      padding:20px; border-radius:10px;
+      border-left:4px solid var(--secondary);
+    }
+    .contact-info p { margin-bottom:10px; font-size:16px; line-height:1.7; }
+    .contact-info p:last-child { margin-bottom:0; }
+    .desc { font-size:15px; color:#666; line-height:1.8; margin-bottom:24px; }
+    .feedback-link { text-align:center; }
+    .feedback-link a {
+      display:inline-block; background:var(--primary); color:#fff;
+      text-decoration:none; padding:12px 36px; border-radius:24px;
+      font-size:16px; font-weight:700; transition:all 0.2s;
+    }
+    .feedback-link a:hover { background:var(--accent); }
+
+    footer { background:#111; color:#aaa; text-align:center; padding:24px; font-size:14px; }
+    footer a { color:var(--secondary); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="/start.html">🏋️ 健身工作坊</a>
+  <div class="nav-links">
+    <a href="/start.html">首頁</a>
+    <a href="/index1.html">關於我們</a>
+    <a href="/class/course.html">課程介紹</a>
+    <a href="/equipment">器材購買</a>
+    <a href="/connection/connection1.html" class="active">聯絡我們</a>
+    <a href="/cart.html" class="cart-btn">🛒 購物車<span class="cart-badge" id="cart-badge"></span></a>
+    <a href="/loginpage" class="login-btn" id="nav-auth">登入 / 註冊</a>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>聯絡我們</h2>
+  <div class="contact-info">
+    <p>📞 聯絡電話：0968-893-150</p>
+    <p>📧 電子郵件：info@fitnessworkshop.com</p>
+    <p>📍 地址：台北市中正區健身路 123 號</p>
+    <p>🕐 營業時間：週一至週日 06:00 - 22:00</p>
+  </div>
+  <p class="desc">如果您有任何疑問或需要協助，歡迎透過以上方式聯絡我們，我們的團隊將竭誠為您服務。</p>
+  <div class="feedback-link">
+    <a href="/connection/comment.html">填寫回饋問卷</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 健身工作坊 &nbsp;|&nbsp; <a href="/index1.html">認識我們的教練</a></p>
+</footer>
+
+<script>
+  const cart = JSON.parse(localStorage.getItem('fw_cart') || '[]');
+  const count = cart.reduce((s,i) => s + i.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (count > 0) { badge.textContent = count; badge.style.display = 'inline'; }
+  fetch('/session-user').then(r=>r.json()).then(d=>{
+    const a = document.getElementById('nav-auth');
+    if(d.loggedIn){ a.href='/start1.html'; a.textContent='👤 '+d.user.帳號; }
+  }).catch(()=>{});
+</script>
+</body>
+</html>
